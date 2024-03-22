@@ -23,7 +23,7 @@ def main():
     st.title('Signature Detection App')
 
     # File uploader
-    uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
+    uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png","JFIF"])
 
     if uploaded_file is not None:
         # Display the uploaded image
@@ -38,11 +38,15 @@ def main():
             prediction = model.predict(np.array([processed_image]))
             # Get the predicted class label
             predicted_class = np.argmax(prediction)
+            confidence_score = np.max(prediction)
             # Display the prediction
-            if predicted_class == 1:
+            if confidence_score < 0.5:
+                st.write("No signature detected")
+            elif predicted_class == 1:
                 st.write("Signature is genuine")
             else:
                 st.write("Signature is forged")
+
 
 if __name__ == '__main__':
     main()
